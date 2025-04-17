@@ -1,0 +1,73 @@
+app-id: org.myani.animeko
+runtime: org.kde.Platform
+runtime-version: '5.15-24.08'
+sdk: org.kde.Sdk
+base: org.videolan.VLC
+base-version: stable
+separate-locales: false
+command: Ani
+
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=pulseaudio
+  - --share=network
+  - --device=dri
+  - --persist=.java
+  - --persist=.pki
+  - --talk-name=org.freedesktop.secrets
+  - --talk-name=org.kde.kwalletd5
+  - --talk-name=org.kde.kwalletd6
+
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /share/aclocal
+  - /share/doc
+  - /share/gtk-doc
+  - /share/info
+  - /share/man
+  - /share/pkgconfig
+  - /lib/cmake
+  - '*.la'
+  - '*.a'
+
+modules:
+  - name: clean-vlc
+    buildsystem: simple
+    build-commands:
+      - rm -rf ${FLATPAK_DEST}/share/metainfo
+      - rm -rf ${FLATPAK_DEST}/share/app-info
+      - rm -rf ${FLATPAK_DEST}/share/applications
+      - rm -rf ${FLATPAK_DEST}/share/icons
+      - rm -rf ${FLATPAK_DEST}/share/kde4
+      - rm -rf ${FLATPAK_DEST}/share/locale
+      - rm -rf ${FLATPAK_DEST}/share/runtime
+      - rm -rf ${FLATPAK_DEST}/share/vlc
+
+  - name: animeko
+    only-arches: [x86_64]
+    buildsystem: simple
+    build-commands:
+      - chmod +x animeko.appimage
+      - ./animeko.appimage --appimage-extract
+      - desktop-file-edit --set-icon=${FLATPAK_ID} squashfs-root/animeko.desktop
+      - install -Dm644 squashfs-root/animeko.desktop ${FLATPAK_DEST}/share/applications/org.myani.animeko.desktop
+      - install -Dm644 squashfs-root/icon.png ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/org.myani.animeko.png
+      - install -Dm644 org.myani.animeko.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo
+      - mkdir -p ${FLATPAK_DEST}/lib
+      - mv squashfs-root/usr ${FLATPAK_DEST}/lib/animeko
+      - ln -sf ${FLATPAK_DEST}/lib/animeko/bin/Ani ${FLATPAK_DEST}/bin/Ani
+    sources:
+      - type: file
+        url: https://github.com/open-ani/animeko/releases/download/v4.8.2/ani-4.8.2-linux-x86_64.appimage
+        dest-filename: animeko.appimage
+        sha256: 234f3c0cd1d86447f5f71f52bf435516baacfa2a74021075a2d0f292ca2a5fd5
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/open-ani/animeko/releases/latest
+          version-query: .tag_name | sub("v"; "")
+          url-query: .assets[] | select(.name == "ani-" + $version + "-linux-x86_64.appimage") | .browser_download_url
+
+      - type: file
+        path: org.myani.animeko.metainfo.xml

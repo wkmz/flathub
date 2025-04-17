@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.myani.animeko</id>
+  
+  <name>Animeko</name>
+  <summary>One-stop platform for finding, following and watching anime</summary>
+  <developer_name>OpenAni</developer_name>
+
+  <url type="homepage">https://myani.org/</url>
+  <url type="bugtracker">https://github.com/open-ani/animeko/issues</url>
+  <url type="faq">https://myani.org/wiki</url>
+  <url type="vcs-browser">https://github.com/open-ani/animeko</url>
+  
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>AGPL-3.0-or-later</project_license>
+  
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+  
+  <description>
+    <p>
+      Animeko supports cloud-synced viewing history (Bangumi), multiple video data sources, caching, barrage, and more features to provide anime-watching experience that is as simple and comfortable as possible.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">org.myani.animeko.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/open-ani/animeko/raw/main/.readme/images/features/pc-home.png</image>
+    </screenshot>
+  </screenshots>
+
+  <content_rating type="oars-1.1" />
+
+  <releases>
+    <release version="4.8.2" date="2025-04-17" />
+  </releases>
+</component>
